@@ -12,7 +12,7 @@ class Page:
 
         self.screen: pg.display = pg.display.set_mode((self.width, self.height))
         pg.display.set_caption(self.pageName)
-        pg.display.set_icon(pg.image.load("icon.png"))
+        pg.display.set_icon(pg.image.load("Resources/icon.png"))
         self.clock: pg.time.Clock = pg.time.Clock()
 
         self.running: bool = True

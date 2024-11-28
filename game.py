@@ -24,7 +24,7 @@ class Game:
         self.circles: list[Circle] = self.getCircles()
         self.background: Rectangle = Rectangle(self.width - ((data.FRAME_FEET_WIDTH * 2) * self.scale), (data.FRAME_FEET_HEIGHT * self.scale) * 2, data.FRAME_FEET_WIDTH * self.scale, self.height - (data.FRAME_FEET_WIDTH * self.scale), data.BACKGROUND_COLOUR, data.RECTANGLE_BORDER_RADIUS)
 
-        self.screen: pg.display = pg.display.set_mode((self.width, self.height))
+        self.screen: pg.display = pg.display.set_mode((self.width, self.height), pg.DOUBLEBUF)
         pg.display.set_caption("Connect 4")
         self.clock: pg.time.Clock = pg.time.Clock()
 
@@ -91,7 +91,7 @@ class Game:
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     self.running = False
-
+    
             self.screen.fill(data.FRAME_COLOUR)
             self.update()
             pg.display.flip()

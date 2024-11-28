@@ -21,7 +21,7 @@ class Button(Rectangle):
     def draw(self, screen: pg.Surface) -> None:
         self.shadow.draw(screen)
         self.outline.draw(screen)
-        font = pg.font.Font("PixelFont.ttf", data.BUTTON_FONT_SIZE)
+        font = pg.font.Font("Resources/PixelFont.ttf", data.BUTTON_FONT_SIZE)
         text = font.render(self.text, True, data.BUTTON_FONT_COLOUR)
         words = self.text.split()
         if len(words) > 1:
