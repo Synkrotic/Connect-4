@@ -6,6 +6,11 @@ TRANSPARENT_COLOUR: tuple[int, int, int] = (0, 0, 0, 0)
 
 FPS: int = 60
 
+BUTTON_OUTLINE_WIDTH: int = 3
+BUTTON_FONT_SIZE: int = 60
+
+RECTANGLE_BORDER_RADIUS: int = 50
+
 WINDOWS_WIDTH: int = 810
 WINDOWS_HEIGHT: int = 740
 

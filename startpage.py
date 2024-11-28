@@ -1,4 +1,4 @@
-import pygame as pg
+import pygame as pg, data
 from page import Page
 from startgamebtn import StartButton
 from button import Button
@@ -9,16 +9,16 @@ class StartPage(Page):
         super().__init__(width, height, pageName, fps)
 
         self.buttons: list[Button] = []
-        self.startAgainstPlayerButton: StartButton = StartButton(self.width//3, self.height//4, self.width//3, self.height//3, (255, 255, 255), (175, 175, 175), "Play Against Player")
-        self.startAgainstAIButton: StartButton = StartButton(self.width//3, self.height//4, (self.width//3) * 2, self.height//3, (255, 255, 255), "Play Against AI")
+        self.startAgainstPlayerButton: StartButton = StartButton(self.width//3, self.height//4, self.width//9, self.height//6, (230, 230, 230), (175, 175, 175), "Play Against Player")
+        # self.startAgainstAIButton: StartButton = StartButton(self.width//3, self.height//4, (self.width//6) * 2, self.height//3, (255, 255, 255), (175, 175, 175), "Play Against AI")
         
         self.buttons.append(self.startAgainstPlayerButton)
-        self.buttons.append(self.startAgainstAIButton)
+        # self.buttons.append(self.startAgainstAIButton)
 
 
     @override
     def draw(self) -> None:
-        self.screen.fill((255, 255, 255))
+        self.screen.fill(data.BACKGROUND_COLOUR)
         for button in self.buttons:
             button.draw(self.screen)
 
