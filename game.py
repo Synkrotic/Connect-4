@@ -7,7 +7,7 @@ from pynput import mouse
 import data, threading
 
 class Game:
-    def __init__(self, scale: int, fps: int) -> None:
+    def __init__(self, scale: int, fps: int, ai: bool) -> None:
         pg.init()
 
         self.ROWS: int = 6
@@ -15,13 +15,14 @@ class Game:
         self.scale: int = scale
         self.width: int = data.WINDOWS_WIDTH * self.scale
         self.height: int = data.WINDOWS_HEIGHT * self.scale
+        self.ai: bool = ai
 
         self.fps: int = fps
         self.board: Board = Board(self.ROWS, self.COLUMNS)
         self.player1: Player = Player(data.PLAYER1_COLOUR, self.scale, (self.width, self.height), self, True)
         self.player2: Player = Player(data.PLAYER2_COLOUR, self.scale, (self.width, self.height), self, False)
         self.circles: list[Circle] = self.getCircles()
-        self.background: Rectangle = Rectangle(self.width - ((data.FRAME_FEET_WIDTH * 2) * self.scale), data.FRAME_FEET_HEIGHT * self.scale, data.FRAME_FEET_WIDTH * self.scale, self.height - (data.FRAME_FEET_WIDTH * self.scale), data.BACKGROUND_COLOUR)
+        self.background: Rectangle = Rectangle(self.width - ((data.FRAME_FEET_WIDTH * 2) * self.scale), (data.FRAME_FEET_HEIGHT * self.scale) * 2, data.FRAME_FEET_WIDTH * self.scale, self.height - (data.FRAME_FEET_WIDTH * self.scale), data.BACKGROUND_COLOUR, data.RECTANGLE_BORDER_RADIUS)
 
         self.screen: pg.display = pg.display.set_mode((self.width, self.height))
         pg.display.set_caption("Connect 4")
@@ -68,9 +69,9 @@ class Game:
 
 
     def update(self) -> None:
-        check: str | bool = self.checkWin()
+        check: bool = self.board.checkWin()
         if (check):
-            print(f"{check} wins!")
+            print(f"{self.getColorTurnString()} wins!")
             self.running = False
 
         self.draw()
@@ -81,58 +82,6 @@ class Game:
             circle.draw(self.screen)
         self.background.draw(self.screen)
         self.board.drawToScreen(self.screen)
-
-
-    def checkWin(self) -> bool | str:
-        for x in range(self.COLUMNS):
-            for y in range(self.ROWS):
-                if (self.board.getItemAt(x, y).colour == data.BACKGROUND_COLOUR): continue
-                if (self.checkHorizontal(x, y) or self.checkVertical(x, y) or self.checkDiagonalLeft(x, y) or self.checkDiagonalRight(x, y)): return self.getColorTurnString()
-        return False
-
-
-    def checkHorizontal(self, x: int, y: int) -> bool:
-        if (x > self.COLUMNS - 4): return False
-        result: bool = True
-        for i in range(1, 4):
-            circle: Circle = self.board.getItemAt(x + i, y)
-
-            if (circle == None): continue
-            elif (circle.colour != self.board.getItemAt(x, y).colour): result = False
-        return result
-
-
-    def checkVertical(self, x: int, y: int) -> bool:
-        if (y > self.ROWS - 4): return False
-        result: bool = True
-        for i in range(1, 4):
-            circle: Circle = self.board.getItemAt(x, y + i)
-
-            if (circle == None): continue
-            elif (circle.colour != self.board.getItemAt(x, y).colour): result = False
-        return result
-    
-
-    def checkDiagonalLeft(self, x: int, y: int) -> bool:
-        result: bool = True
-        for i in range(1, 4):
-            circle: Circle = self.board.getItemAt(x + i, y + i)
-
-            if (circle != None):
-                if (circle.colour != self.board.getItemAt(x, y).colour): result = False
-            else: result = False
-        return result
-    
-
-    def checkDiagonalRight(self, x: int, y: int) -> bool:
-        result: bool = True
-        for i in range(1, 4):
-            circle: Circle = self.board.getItemAt(x - i, y + i)
-
-            if (circle != None):
-                if (circle.colour != self.board.getItemAt(x, y).colour): result = False
-            else: result = False
-        return result
 
 
     def run(self) -> bool:

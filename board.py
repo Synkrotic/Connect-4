@@ -54,4 +54,55 @@ class Board:
                 elif (item.colour == data.PLAYER2_COLOUR): print("2", end = " | ")
                 else: print("?", end = " | ")
             print("\n")
-            
+
+
+    def checkWin(self) -> bool | str:
+        for x in range(self.columns):
+            for y in range(self.rows):
+                if (self.getItemAt(x, y).colour == data.BACKGROUND_COLOUR): continue
+                if (self.checkHorizontal(x, y) or self.checkVertical(x, y) or self.checkDiagonalLeft(x, y) or self.checkDiagonalRight(x, y)): return True
+        return False
+
+
+    def checkHorizontal(self, x: int, y: int) -> bool:
+        if (x > self.columns - 4): return False
+        result: bool = True
+        for i in range(1, 4):
+            circle: Circle = self.getItemAt(x + i, y)
+
+            if (circle == None): continue
+            elif (circle.colour != self.getItemAt(x, y).colour): result = False
+        return result
+
+
+    def checkVertical(self, x: int, y: int) -> bool:
+        if (y > self.rows - 4): return False
+        result: bool = True
+        for i in range(1, 4):
+            circle: Circle = self.getItemAt(x, y + i)
+
+            if (circle == None): continue
+            elif (circle.colour != self.getItemAt(x, y).colour): result = False
+        return result
+    
+
+    def checkDiagonalLeft(self, x: int, y: int) -> bool:
+        result: bool = True
+        for i in range(1, 4):
+            circle: Circle = self.getItemAt(x + i, y + i)
+
+            if (circle != None):
+                if (circle.colour != self.getItemAt(x, y).colour): result = False
+            else: result = False
+        return result
+    
+
+    def checkDiagonalRight(self, x: int, y: int) -> bool:
+        result: bool = True
+        for i in range(1, 4):
+            circle: Circle = self.getItemAt(x - i, y + i)
+
+            if (circle != None):
+                if (circle.colour != self.getItemAt(x, y).colour): result = False
+            else: result = False
+        return result

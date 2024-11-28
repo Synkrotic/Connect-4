@@ -1,16 +1,18 @@
 import pygame as pg
 
 class Page:
-    def __init__(self, width: int, height: int, pageName: str, fps: int) -> None:
+    def __init__(self, width: int, height: int, scale: int, pageName: str, fps: int) -> None:
         pg.init()
 
-        self.width: int = width
-        self.height: int = height
+        self.scale: int = scale
+        self.width: int = width * self.scale
+        self.height: int = height * self.scale
         self.pageName: str = pageName
         self.fps: int = fps
 
         self.screen: pg.display = pg.display.set_mode((self.width, self.height))
         pg.display.set_caption(self.pageName)
+        pg.display.set_icon(pg.image.load("icon.png"))
         self.clock: pg.time.Clock = pg.time.Clock()
 
         self.running: bool = True

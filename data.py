@@ -1,13 +1,24 @@
+BLACK: tuple[int, int, int] = (0, 0, 0)
+
 PLAYER1_COLOUR: tuple[int, int, int] = (190, 0, 0)
 PLAYER2_COLOUR: tuple[int, int, int] = (190, 190, 0)
 BACKGROUND_COLOUR: tuple[int, int, int] = (200, 200, 200)
 FRAME_COLOUR: tuple[int, int, int] = (50, 50, 200)
 TRANSPARENT_COLOUR: tuple[int, int, int] = (0, 0, 0, 0)
 
+BUTTON_FONT_COLOUR: tuple[int, int, int] = (0, 0, 0)
+BUTTON_MENU_COLOUR: tuple[int, int, int] = (230, 230, 230)
+BUTTON_MENU_HOVER_COLOUR: tuple[int, int, int] = (120, 120, 120)
+BUTTON_MENU_SHADOW_COLOUR: tuple[int, int, int, int] = (0, 0, 0, 50)
+
+
+
 FPS: int = 60
 
 BUTTON_OUTLINE_WIDTH: int = 3
-BUTTON_FONT_SIZE: int = 60
+BUTTON_FONT_SIZE: int = 25
+BUTTON_SHADOW_OFFSET: int = 15
+BUTTON_BORDER_RADIUS: int = 18
 
 RECTANGLE_BORDER_RADIUS: int = 50
 
