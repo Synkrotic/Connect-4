@@ -1,16 +1,16 @@
 import pygame as pg, data
 from rectangle import Rectangle
-from typing_extensions import override
+from typing_extensions import override # type: ignore
 
 class Button(Rectangle):
-    def __init__(self, width: int, height: int, x: int, y: int, colour: tuple[int, int, int], hoverColour: tuple[int, int, int], text: str) -> None:
-        super().__init__(width, height, x, y, colour, height // 10)
+    def __init__(self, width: int, height: int, x: int, y: int, colour: tuple[int, int, int], hoverColour: tuple[int, int, int], text: str, borderRadius: int | None) -> None:
+        super().__init__(width, height, x, y, colour, borderRadius)
         self.text: str = text
         self.hovered: bool = False
         self.hoverColour = hoverColour
 
         self.outline: Rectangle = Rectangle(self.width + (data.BUTTON_OUTLINE_WIDTH * 2), self.height + (data.BUTTON_OUTLINE_WIDTH * 2),
-                                            self.x - data.BUTTON_OUTLINE_WIDTH, self.y - data.BUTTON_OUTLINE_WIDTH, data.BLACK, data.BUTTON_BORDER_RADIUS + data.BUTTON_OUTLINE_WIDTH)
+                                            self.x - data.BUTTON_OUTLINE_WIDTH, self.y - data.BUTTON_OUTLINE_WIDTH, data.BLACK, self.borderRadius + data.BUTTON_OUTLINE_WIDTH)
         
         self.shadow: Rectangle = Rectangle(self.width + (data.BUTTON_OUTLINE_WIDTH * 2), self.height + (data.BUTTON_OUTLINE_WIDTH * 2), self.x - data.BUTTON_OUTLINE_WIDTH + data.BUTTON_SHADOW_OFFSET,
                                            self.y - data.BUTTON_OUTLINE_WIDTH  + data.BUTTON_SHADOW_OFFSET, data.BUTTON_MENU_SHADOW_COLOUR, data.BUTTON_BORDER_RADIUS + data.BUTTON_OUTLINE_WIDTH)
@@ -41,9 +41,9 @@ class Button(Rectangle):
 
 
     def update(self) -> None:
-        self.isHovered()
         if (self.hovered and pg.mouse.get_pressed()[0]):
             self.logic()
+        self.isHovered()
 
 
     def isHovered(self) -> None:
@@ -51,4 +51,4 @@ class Button(Rectangle):
         match self.hovered:
             case True: self.image.fill(self.hoverColour)
             case False: self.image.fill(self.colour)
-        self.doBorderRadius(self.height//10)
+        self.doBorderRadius()

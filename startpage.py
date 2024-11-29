@@ -3,13 +3,15 @@ from page import Page
 from startgamebtn import StartButton
 from changecolourbtn import ChangeColourButton
 from button import Button
-from typing_extensions import override
+from typing_extensions import override # type: ignore
 from game import Game
+from colourspage import ColoursPage
 
 class StartPage(Page):
     def __init__(self, width: int, height: int, scale: int, pageName: str, fps: int) -> None:
         super().__init__(width, height, scale, pageName, fps)
         self.game: Game | None = None
+        self.coloursPage: Page | None = None
 
         self.buttons: list[Button] = []
         self.startAgainstPlayerButton: StartButton = StartButton(self.width//3, self.height//4, self.width//9, self.height//6,
@@ -19,8 +21,7 @@ class StartPage(Page):
                                                              self.height//6, data.BUTTON_MENU_COLOUR, data.BUTTON_MENU_HOVER_COLOUR, "Play Against AI", True, self)
         
         self.changeUserColoursButton: ChangeColourButton = ChangeColourButton(self.width//3, self.height//4, self.width//2 - self.width//6, self.height//6 + (self.height//4 + self.height//9),
-                                                                 data.BUTTON_MENU_COLOUR, data.BUTTON_MENU_HOVER_COLOUR, "Change User Colours")
-
+                                                                                data.BUTTON_MENU_COLOUR, data.BUTTON_MENU_HOVER_COLOUR, "Change User Colours", self)
 
         self.buttons.append(self.startAgainstPlayerButton)
         self.buttons.append(self.startAgainstAIButton)
@@ -42,3 +43,6 @@ class StartPage(Page):
             # self.running = False
             self.game.run()
             self.game = None
+        elif (self.coloursPage != None):
+            self.coloursPage.run()
+            self.coloursPage = None

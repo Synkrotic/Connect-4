@@ -1,6 +1,6 @@
 import data
 from button import Button
-from typing_extensions import override
+from typing_extensions import override # type: ignore
 from game import Game
 
 class StartButton(Button):
