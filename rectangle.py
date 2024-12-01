@@ -2,7 +2,7 @@ import pygame as pg
 import data
 
 class Rectangle:
-    def __init__(self, width: int, height: int, x: int, y: int, colour: tuple[int, int, int], borderRadius: int) -> None:
+    def __init__(self, width: int, height: int, x: int, y: int, colour: tuple[int, int, int], borderRadius: int | None) -> None:
         self.width: int = width
         self.height: int = height
         self.x = x

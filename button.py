@@ -3,18 +3,19 @@ from rectangle import Rectangle
 from typing_extensions import override # type: ignore
 
 class Button(Rectangle):
-    def __init__(self, width: int, height: int, x: int, y: int, colour: tuple[int, int, int], hoverColour: tuple[int, int, int], text: str, borderRadius: int | None) -> None:
+    def __init__(self, width: int, height: int, x: int, y: int, colour: tuple[int, int, int], hoverColour: tuple[int, int, int], text: str, borderRadius: int | None, shadowOffset: int | None) -> None:
         super().__init__(width, height, x, y, colour, borderRadius)
         self.text: str = text
         self.hovered: bool = False
         self.hoverColour = hoverColour
         self.clicked: bool = False
+        self.shadowOffset: int = shadowOffset if shadowOffset != None else data.BUTTON_SHADOW_OFFSET
 
         self.outline: Rectangle = Rectangle(self.width + (data.BUTTON_OUTLINE_WIDTH * 2), self.height + (data.BUTTON_OUTLINE_WIDTH * 2),
                                             self.x - data.BUTTON_OUTLINE_WIDTH, self.y - data.BUTTON_OUTLINE_WIDTH, data.BLACK, self.borderRadius + data.BUTTON_OUTLINE_WIDTH)
         
-        self.shadow: Rectangle = Rectangle(self.width + (data.BUTTON_OUTLINE_WIDTH * 2), self.height + (data.BUTTON_OUTLINE_WIDTH * 2), self.x - data.BUTTON_OUTLINE_WIDTH + data.BUTTON_SHADOW_OFFSET,
-                                           self.y - data.BUTTON_OUTLINE_WIDTH  + data.BUTTON_SHADOW_OFFSET, data.BUTTON_MENU_SHADOW_COLOUR, data.BUTTON_BORDER_RADIUS + data.BUTTON_OUTLINE_WIDTH)
+        self.shadow: Rectangle = Rectangle(self.width + data.BUTTON_OUTLINE_WIDTH, self.height + data.BUTTON_OUTLINE_WIDTH, self.x + self.shadowOffset,
+                                           self.y + self.shadowOffset, data.BUTTON_MENU_SHADOW_COLOUR, self.borderRadius)
 
         
 

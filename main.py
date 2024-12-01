@@ -7,7 +7,7 @@ pg.init()
 startPage: StartPage = StartPage(data.WINDOWS_WIDTH, data.WINDOWS_HEIGHT, 1, "Homepage", data.FPS)
 startPage.run()
 
-# coloursPage: ColoursPage = ColoursPage(data.WINDOWS_WIDTH, data.WINDOWS_HEIGHT, 1, "Homepage", data.FPS)
+# coloursPage: ColoursPage = ColoursPage(data.WINDOWS_WIDTH, data.WINDOWS_HEIGHT, 1, "Colours", data.FPS)
 # coloursPage.run()
 
 pg.quit()

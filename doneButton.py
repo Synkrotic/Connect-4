@@ -1,12 +1,11 @@
 import data, pygame as pg
 from button import Button
 from typing_extensions import override # type: ignore
-from game import Game
 from pynput import mouse
 
 class DoneButton(Button):
-    def __init__(self, width: int, height: int, x: int, y: int, colour: tuple[int, int, int], hoverColour: tuple[int, int, int], text: str, page: 'Page', borderRadius: int | None) -> None: # type: ignore
-        super().__init__(width, height, x, y, colour, hoverColour, text, borderRadius)
+    def __init__(self, width: int, height: int, x: int, y: int, colour: tuple[int, int, int], hoverColour: tuple[int, int, int], text: str, page: 'Page', borderRadius: int | None, shadowOffset: int | None) -> None: # type: ignore
+        super().__init__(width, height, x, y, colour, hoverColour, text, borderRadius, shadowOffset)
         self.page: 'Page' = page # type: ignore
         self.pressed: bool = False
 

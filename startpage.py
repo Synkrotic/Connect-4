@@ -37,5 +37,6 @@ class StartPage(Page):
 
     @override
     def logic(self) -> None:
+        pg.display.set_caption(f"Connect 4 | {self.pageName}")
         for button in self.buttons:
             button.update()

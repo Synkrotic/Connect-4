@@ -1,10 +1,10 @@
-import pygame as pg, sys
+import pygame as pg, data, threading
 from player import Player
 from board import Board
 from rectangle import Rectangle
 from circleItem import CircleItem as Circle
 from pynput import mouse
-import data, threading
+from endscreen import EndScreen
 
 class Game:
     def __init__(self, scale: int, fps: int, ai: bool) -> None:
@@ -18,20 +18,23 @@ class Game:
 
         self.fps: int = fps
         self.board: Board = Board(self.ROWS, self.COLUMNS)
-        self.player1: Player = Player(data.PLAYER1_COLOUR, self.scale, (self.width, self.height), self, True)
-        self.player2: Player = Player(data.PLAYER2_COLOUR, self.scale, (self.width, self.height), self, False)
+        self.player1: Player = Player(data.player1_colour, self.scale, (self.width, self.height), self, True)
+        self.player2: Player = Player(data.player2_colour, self.scale, (self.width, self.height), self, False)
         self.circles: list[Circle] = self.getCircles()
         self.background: Rectangle = Rectangle(self.width - ((data.FRAME_FEET_WIDTH * 2) * self.scale), (data.FRAME_FEET_HEIGHT * self.scale) * 2, data.FRAME_FEET_WIDTH * self.scale, self.height - (data.FRAME_FEET_WIDTH * self.scale), data.BACKGROUND_COLOUR, data.RECTANGLE_BORDER_RADIUS)
 
-        self.screen: pg.display = pg.display.set_mode((self.width, self.height), pg.DOUBLEBUF)
+        self.screen: pg.display = pg.display.set_mode((self.width, self.height), pg.SRCALPHA)
         pg.display.set_caption("Connect 4 | Game")
         self.clock: pg.time.Clock = pg.time.Clock()
 
         self.running: bool = True
         self.pressedMouseDown: bool = False
         self.frame: int = 0
+        self.ended: bool = False
         self.turn: bool = True
+
         self.listener: mouse.Listener | None = None
+        self.endScreen: EndScreen | None = None
 
         self.listenerThread: threading.Thread = threading.Thread(target=self.startMouseListener)
         self.listenerThread.start()
@@ -63,17 +66,29 @@ class Game:
 
     def updateActivePlayer(self, x: int, y: int, button: mouse.Button, pressed: bool) -> None:
         if (pg.mouse.get_focused() == False): return
+        if (self.ended):
+            self.endScreen.backButton.onClickLogic(x, y, button, pressed)
+            return;
         activePlayer: Player = self.getColorTurn()
         activePlayer.onClick(x, y, button, pressed)
 
 
     def update(self) -> None:
+        self.draw()
+
+        if (self.ended): 
+            if (self.endScreen.logic()):
+                self.running = False
+            return;
+
         check: bool = self.board.checkWin()
         if (check):
-            print(f"{self.getColorTurnString()} wins!")
-            self.running = False
+            winner = self.getColorTurnString()
+            print(f"{winner} wins!")
+            self.endScreen = EndScreen(self.width, self.height, 0, 0, winner)
+            self.ended = True
 
-        self.draw()
+        
 
 
     def draw(self) -> None:
@@ -81,6 +96,9 @@ class Game:
             circle.draw(self.screen)
         self.background.draw(self.screen)
         self.board.drawToScreen(self.screen)
+
+        if (self.ended): self.endScreen.draw(self.screen)
+
 
 
     def run(self) -> bool:
