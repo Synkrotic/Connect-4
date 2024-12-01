@@ -46,6 +46,14 @@ class Board:
         return True
     
 
+    def copy(self) -> 'Board':
+        newBoard: Board = Board(self.rows, self.columns)
+        for x in range(self.columns):
+            for y in range(self.rows):
+                newBoard.setItemAt(x, y, self.getItemAt(x, y))
+        return newBoard
+
+
     def showInTerminal(self) -> None:
         for row in self.layout:
             for item in row:
@@ -56,53 +64,78 @@ class Board:
             print("\n")
 
 
+    def checkTie(self) -> bool:
+        for x in range(self.columns):
+            for y in range(self.rows):
+                if (self.getItemAt(x, y).colour == data.BACKGROUND_COLOUR): return False
+        return True
+
+
     def checkWin(self) -> bool | str:
         for x in range(self.columns):
             for y in range(self.rows):
+                if (self.getItemAt(x, y) == None): tie = False
                 if (self.getItemAt(x, y).colour == data.BACKGROUND_COLOUR): continue
-                if (self.checkHorizontal(x, y) or self.checkVertical(x, y) or self.checkDiagonalLeft(x, y) or self.checkDiagonalRight(x, y)): return True
+                if (self.checkHorizontal(x, y) == 3 or self.checkVertical(x, y) == 3 or self.checkDiagonalLeft(x, y) == 3 or self.checkDiagonalRight(x, y) == 3): return True
         return False
 
 
-    def checkHorizontal(self, x: int, y: int) -> bool:
+    def checkHorizontal(self, x: int, y: int) -> int:
         if (x > self.columns - 4): return False
-        result: bool = True
+        result: int = 0
+        colour: tuple[int, int, int] = self.getItemAt(x, y).colour
         for i in range(1, 4):
             circle: Circle = self.getItemAt(x + i, y)
 
-            if (circle == None): continue
-            elif (circle.colour != self.getItemAt(x, y).colour): result = False
+            if (circle == None or circle.colour == data.BACKGROUND_COLOUR): continue
+            elif (circle.colour == colour): result += 1
+            else: break
         return result
 
 
-    def checkVertical(self, x: int, y: int) -> bool:
-        if (y > self.rows - 4): return False
-        result: bool = True
+    def checkVertical(self, x: int, y: int) -> int:
+        if (y > self.rows - 4): return 0
+        result: int = 0
+        colour: tuple[int, int, int] = self.getItemAt(x, y).colour
         for i in range(1, 4):
             circle: Circle = self.getItemAt(x, y + i)
 
-            if (circle == None): continue
-            elif (circle.colour != self.getItemAt(x, y).colour): result = False
+            if (circle == None or circle.colour == data.BACKGROUND_COLOUR): continue
+            elif (circle.colour == colour): result += 1
+            else: break
         return result
     
 
-    def checkDiagonalLeft(self, x: int, y: int) -> bool:
-        result: bool = True
+    def checkDiagonalLeft(self, x: int, y: int) -> int:
+        result: int = 0
+        colour: tuple[int, int, int] = self.getItemAt(x, y).colour
         for i in range(1, 4):
             circle: Circle = self.getItemAt(x + i, y + i)
 
-            if (circle != None):
-                if (circle.colour != self.getItemAt(x, y).colour): result = False
-            else: result = False
+            if (circle == None or circle.colour == data.BACKGROUND_COLOUR): continue
+            elif (circle.colour == colour): result += 1
+            else: break
         return result
     
 
-    def checkDiagonalRight(self, x: int, y: int) -> bool:
-        result: bool = True
+    def checkDiagonalRight(self, x: int, y: int) -> int:
+        result: int = 0
+        colour: tuple[int, int, int] = self.getItemAt(x, y).colour
         for i in range(1, 4):
             circle: Circle = self.getItemAt(x - i, y + i)
 
-            if (circle != None):
-                if (circle.colour != self.getItemAt(x, y).colour): result = False
-            else: result = False
+            if (circle == None or circle.colour == data.BACKGROUND_COLOUR): continue
+            elif (circle.colour == colour): result += 1
+            else: break
         return result
+    
+
+    def calculatePosition(self) -> int:
+        score: int = 0
+        for i in range(self.columns):
+            for j in range(self.rows):
+                score += self.checkHorizontal(i, j)
+                score += self.checkVertical(i, j)
+                score += self.checkDiagonalLeft(i, j)
+                score += self.checkDiagonalRight(i, j)
+        return score

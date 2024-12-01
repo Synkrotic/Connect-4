@@ -25,7 +25,7 @@ class Player:
             column: int = self.getColumn(xCoord)
             if (column == -1): return;
         
-            circle: Circle = Circle(y=None, x=column, colour=self.colour, scale=self.scale, game=self.game)
-            if (circle.y != -1): self.items.append(circle)
-
-            self.game.turn = not self.game.turn   
+            circle: Circle = Circle(y=None, x=column, colour=self.colour, scale=self.scale, game=self.game, board=self.game.board)
+            if (circle.y != -1):
+                self.items.append(circle)
+                self.game.turn = not self.game.turn   

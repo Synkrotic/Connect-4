@@ -1,5 +1,6 @@
 import pygame as pg, data, threading
 from player import Player
+from aiplayer import AIPlayer
 from board import Board
 from rectangle import Rectangle
 from circleItem import CircleItem as Circle
@@ -19,7 +20,10 @@ class Game:
         self.fps: int = fps
         self.board: Board = Board(self.ROWS, self.COLUMNS)
         self.player1: Player = Player(data.player1_colour, self.scale, (self.width, self.height), self, True)
-        self.player2: Player = Player(data.player2_colour, self.scale, (self.width, self.height), self, False)
+        if (not self.ai):
+            self.player2: Player = Player(data.player2_colour, self.scale, (self.width, self.height), self, False)
+        else:
+            self.player2: AIPlayer = AIPlayer(data.player2_colour, self.scale, self, False)
         self.circles: list[Circle] = self.getCircles()
         self.background: Rectangle = Rectangle(self.width - ((data.FRAME_FEET_WIDTH * 2) * self.scale), (data.FRAME_FEET_HEIGHT * self.scale) * 2, data.FRAME_FEET_WIDTH * self.scale, self.height - (data.FRAME_FEET_WIDTH * self.scale), data.BACKGROUND_COLOUR, data.RECTANGLE_BORDER_RADIUS)
 
@@ -45,7 +49,7 @@ class Game:
         circles: list[Circle] = []
         for x in range(self.COLUMNS):
             for y in range(self.ROWS):
-                circles.append(Circle(y, x, data.BACKGROUND_COLOUR, self.scale, self))
+                circles.append(Circle(y, x, data.BACKGROUND_COLOUR, self.scale, self, self.board))
         return circles
 
 
@@ -65,10 +69,11 @@ class Game:
 
 
     def updateActivePlayer(self, x: int, y: int, button: mouse.Button, pressed: bool) -> None:
-        if (pg.mouse.get_focused() == False): return
+        if (pg.mouse.get_focused() == False): return;
         if (self.ended):
             self.endScreen.backButton.onClickLogic(x, y, button, pressed)
             return;
+        if (self.ai and not self.turn): return;
         activePlayer: Player = self.getColorTurn()
         activePlayer.onClick(x, y, button, pressed)
 
@@ -81,16 +86,18 @@ class Game:
                 self.running = False
             return;
 
-        check: bool = self.board.checkWin()
-        if (check):
+        tie: bool = False
+        # 
+        if (self.board.checkWin() or (tie := self.board.checkTie())):
             winner = self.getColorTurnString()
-            print(f"{winner} wins!")
-            self.endScreen = EndScreen(self.width, self.height, 0, 0, winner)
+            print(f"{winner} wins!" if not tie else "It's a tie!")
+            self.endScreen = EndScreen(self.width, self.height, 0, 0, f"{winner} won!" if not tie else "It's a tie!")
             self.ended = True
+        
+        if (self.ai and not self.turn):
+            self.player2.logic()
 
         
-
-
     def draw(self) -> None:
         for circle in self.circles:
             circle.draw(self.screen)

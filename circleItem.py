@@ -2,11 +2,13 @@ import pygame as pg
 import data
 
 class CircleItem:
-    def __init__(self, y: int | None, x: int, colour: tuple, scale: int, game: 'Game') -> None: # type: ignore
+    def __init__(self, y: int | None, x: int, colour: tuple, scale: int, game: 'Game', board: 'Board') -> None: # type: ignore
         self.colour: tuple[int, int, int] = colour
         self.scale: int = scale
         self.width: int = data.CIRCLE_DIAMETER * self.scale
         self.height: int = data.CIRCLE_DIAMETER * self.scale
+        self.game: 'Game' = game # type: ignore
+        self.board: 'Board' = board # type: ignore
         self.y: int = 0
 
         self.squareImage: pg.Surface = pg.Surface((self.width, self.height), pg.SRCALPHA)
@@ -20,16 +22,16 @@ class CircleItem:
         self.image.blit(self.mask, (0, 0), special_flags=pg.BLEND_RGBA_MIN)
 
         self.rect = self.image.get_rect()
-        self.setPosition(x, y, game)
+        self.setPosition(x, y)
 
 
     def draw(self, screen: pg.display) -> None:
         screen.blit(self.image, self.rect.topleft)
 
 
-    def setPosition(self, x: int, y: int, game) -> None:
+    def setPosition(self, x: int, y: int) -> None:
         yCoords: int = y
-        if (y == None): yCoords = self.getLowestY(x, game.board)
+        if (y == None): yCoords = self.getLowestY(x)
 
         self.y = yCoords
 
@@ -37,12 +39,12 @@ class CircleItem:
             print("Try again. This column is full.")
             return;
 
-        game.board.setItemAt(x, yCoords, self)
+        self.board.setItemAt(x, yCoords, self)
 
         self.rect.x = self.calcX(x)
-        self.rect.y = self.calcY(yCoords, game.height)
+        self.rect.y = self.calcY(yCoords, self.game.height)
 
-        # game.BOARD.showInTerminal()
+        # self.board.showInTerminal()
 
     def calcX(self, x: int) -> int:
         return (data.CIRCLE_PADDING * self.scale * x) + (x * data.CIRCLE_DIAMETER * self.scale) + (data.FRAME_MARGIN * self.scale)
@@ -52,9 +54,9 @@ class CircleItem:
         return windowHeight - ((data.CIRCLE_DIAMETER * self.scale) + (y * data.CIRCLE_DIAMETER * self.scale) + (data.CIRCLE_PADDING * self.scale * y) + ((data.FRAME_FEET_HEIGHT + data.FRAME_MARGIN)) * self.scale)
     
 
-    def getLowestY(self, x: int, board) -> int:
-        for y in range(board.columns):
-            if board.getItemAt(x, y).colour == data.BACKGROUND_COLOUR:
+    def getLowestY(self, x: int) -> int:
+        for y in range(self.board.columns):
+            if self.board.getItemAt(x, y).colour == data.BACKGROUND_COLOUR:
                 # print(f"Found! {y} for {self.id}")
                 return y
         # print(f"None found! For {self.id}")
