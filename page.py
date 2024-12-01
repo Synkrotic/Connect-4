@@ -2,7 +2,6 @@ import pygame as pg
 
 class Page:
     def __init__(self, width: int, height: int, scale: int, pageName: str, fps: int) -> None:
-        pg.init()
 
         self.scale: int = scale
         self.width: int = width * self.scale
@@ -11,7 +10,7 @@ class Page:
         self.fps: int = fps
 
         self.screen: pg.display = pg.display.set_mode((self.width, self.height))
-        pg.display.set_caption(self.pageName)
+        pg.display.set_caption(f"Connect 4 | {self.pageName}")
         pg.display.set_icon(pg.image.load("Resources/icon.png"))
         self.clock: pg.time.Clock = pg.time.Clock()
 

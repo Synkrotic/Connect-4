@@ -1,7 +1,7 @@
 import pygame as pg, data
 from page import Page
 from startgamebtn import StartButton
-from changecolourbtn import ChangeColourButton
+from changecolourpagebtn import ChangeColourPageButton
 from button import Button
 from typing_extensions import override # type: ignore
 from game import Game
@@ -20,7 +20,7 @@ class StartPage(Page):
         self.startAgainstAIButton: StartButton = StartButton(self.width//3, self.height//4, self.width - ((self.width//9) + self.width//3),
                                                              self.height//6, data.BUTTON_MENU_COLOUR, data.BUTTON_MENU_HOVER_COLOUR, "Play Against AI", True, self)
         
-        self.changeUserColoursButton: ChangeColourButton = ChangeColourButton(self.width//3, self.height//4, self.width//2 - self.width//6, self.height//6 + (self.height//4 + self.height//9),
+        self.changeUserColoursButton: ChangeColourPageButton = ChangeColourPageButton(self.width//3, self.height//4, self.width//2 - self.width//6, self.height//6 + (self.height//4 + self.height//9),
                                                                                 data.BUTTON_MENU_COLOUR, data.BUTTON_MENU_HOVER_COLOUR, "Change User Colours", self)
 
         self.buttons.append(self.startAgainstPlayerButton)
@@ -39,10 +39,3 @@ class StartPage(Page):
     def logic(self) -> None:
         for button in self.buttons:
             button.update()
-        if (self.game != None):
-            # self.running = False
-            self.game.run()
-            self.game = None
-        elif (self.coloursPage != None):
-            self.coloursPage.run()
-            self.coloursPage = None

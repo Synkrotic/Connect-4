@@ -8,7 +8,6 @@ import data, threading
 
 class Game:
     def __init__(self, scale: int, fps: int, ai: bool) -> None:
-        pg.init()
 
         self.ROWS: int = 6
         self.COLUMNS: int = 7
@@ -25,7 +24,7 @@ class Game:
         self.background: Rectangle = Rectangle(self.width - ((data.FRAME_FEET_WIDTH * 2) * self.scale), (data.FRAME_FEET_HEIGHT * self.scale) * 2, data.FRAME_FEET_WIDTH * self.scale, self.height - (data.FRAME_FEET_WIDTH * self.scale), data.BACKGROUND_COLOUR, data.RECTANGLE_BORDER_RADIUS)
 
         self.screen: pg.display = pg.display.set_mode((self.width, self.height), pg.DOUBLEBUF)
-        pg.display.set_caption("Connect 4")
+        pg.display.set_caption("Connect 4 | Game")
         self.clock: pg.time.Clock = pg.time.Clock()
 
         self.running: bool = True

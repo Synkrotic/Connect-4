@@ -8,6 +8,7 @@ class Button(Rectangle):
         self.text: str = text
         self.hovered: bool = False
         self.hoverColour = hoverColour
+        self.clicked: bool = False
 
         self.outline: Rectangle = Rectangle(self.width + (data.BUTTON_OUTLINE_WIDTH * 2), self.height + (data.BUTTON_OUTLINE_WIDTH * 2),
                                             self.x - data.BUTTON_OUTLINE_WIDTH, self.y - data.BUTTON_OUTLINE_WIDTH, data.BLACK, self.borderRadius + data.BUTTON_OUTLINE_WIDTH)
@@ -38,6 +39,10 @@ class Button(Rectangle):
 
     def logic(self) -> None:
         print("Button has no logic yet.")
+
+
+    def onClick(self) -> None:
+        self.clicked = True
 
 
     def update(self) -> None:
