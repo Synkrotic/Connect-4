@@ -12,6 +12,8 @@ class StartButton(Button):
 
     @override
     def logic(self) -> None:
+        """Starts the game with the selected settings.
+            And runs the main loop of the game."""
         print("Starting game against " + ("AI" if self.ai else "Player"))
         page: 'Page' = Game(self.mainPage.scale, self.mainPage.fps, self.ai) # type: ignore
         page.run()

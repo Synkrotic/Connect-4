@@ -31,7 +31,7 @@ class ColoursPage(Page):
         self.textPlayer2 = font.render("Player 2", True, data.BUTTON_FONT_COLOUR)
 
 
-        self.colourOptions1: ColourOptionContainer = ColourOptionContainer(0, self.height//100 * 29, 1)
+        self.colourOptions1: ColourOptionContainer = ColourOptionContainer(0, self.height*0.29, 1)
         self.colourOptions2: ColourOptionContainer = ColourOptionContainer(data.WINDOWS_WIDTH//2 + data.SPLITTER_WIDTH, self.height//100 * 29, 2)
         self.colourOptions1.getOtherColourID(self.colourOptions2)
         self.colourOptions2.getOtherColourID(self.colourOptions1)
@@ -41,11 +41,14 @@ class ColoursPage(Page):
 
 
     def startMouseListener(self) -> None:
+        """Start listening for mouse inputs."""
         self.listener = mouse.Listener(on_click=self.onClick)
         self.listener.start()
 
 
     def onClick(self, x: int, y: int, button: mouse.Button, pressed: bool) -> None:
+        """This function is called when the mouse is clicked.
+            It calls the onClickLogic function for each button in the page."""
         if (pg.mouse.get_focused() == False): return
         for button in self.doneButtons:
             button.onClickLogic(x, y, button, pressed)
@@ -53,6 +56,7 @@ class ColoursPage(Page):
 
     @override
     def draw(self) -> None:
+        """It draws all buttons, colour containers and text to the screen."""
         self.screen.fill(data.BACKGROUND_COLOUR)
         self.screen.blit(self.textPlayer1, (self.width//4 - self.textPlayer1.get_width()//2, self.height//9))
 
@@ -70,6 +74,7 @@ class ColoursPage(Page):
 
     @override
     def logic(self) -> None:
+        """It updates the page title, all buttons and colour containers."""
         pg.display.set_caption(f"Connect 4 | {self.pageName}")
         goBack: bool = True
         for button in self.doneButtons:
@@ -84,6 +89,7 @@ class ColoursPage(Page):
     
     @override
     def run(self) -> None:
+        """Starts the main loop of the page."""
         while self.running:
             for event in pg.event.get():
                 if (event.type == pg.QUIT):

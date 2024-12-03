@@ -21,6 +21,9 @@ class Button(Rectangle):
 
     @override
     def draw(self, screen: pg.Surface) -> None:
+        """Draws the button to the screen.
+            Draws the shadow, outline, and text of the button.
+            It splits the text if its longer than 2 words."""
         self.shadow.draw(screen)
         self.outline.draw(screen)
         font = pg.font.Font("Resources/PixelFont.ttf", data.BUTTON_FONT_SIZE)
@@ -39,20 +42,26 @@ class Button(Rectangle):
 
 
     def logic(self) -> None:
+        """The logic of the button.
+            Default prints it has no logic."""
         print("Button has no logic yet.")
 
 
     def onClick(self) -> None:
+        """The action of the button when clicked."""
         self.clicked = True
 
 
     def update(self) -> None:
+        """Updates the logic and draw functions."""
         if (self.hovered and pg.mouse.get_pressed()[0]):
             self.logic()
         self.isHovered()
 
 
     def isHovered(self) -> None:
+        """Checks if the button is hovered and changes the colour.
+            When the colour is changed it has to redo the border radius."""
         self.hovered = self.rect.collidepoint(pg.mouse.get_pos())
         match self.hovered:
             case True: self.image.fill(self.hoverColour)

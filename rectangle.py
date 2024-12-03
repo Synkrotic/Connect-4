@@ -23,6 +23,7 @@ class Rectangle:
     
 
     def doBorderRadius(self) -> None:
+        """Calculates and applies the border radius to the rectangle for rounded corners."""
         mask: pg.Surface = pg.Surface((self.width, self.height), pg.SRCALPHA)
         mask.fill(data.TRANSPARENT_COLOUR)
         pg.draw.rect(mask, data.BACKGROUND_COLOUR, mask.get_rect(), border_radius=self.borderRadius)
@@ -31,4 +32,5 @@ class Rectangle:
 
 
     def draw(self, screen: pg.display) -> None:
+        """Draw the rectangle to the screen."""
         screen.blit(self.image, self.rect.topleft)

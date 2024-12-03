@@ -14,12 +14,16 @@ class Player:
 
         
     def getColumn(self, xCoord: int) -> int:
+        """Returns the column number which is calculated by the x coordinate of the mouse.
+            If you aren't hovering over a column, it returns -1."""
         for column, boundaries in data.columnBoundaries.items():
             if (boundaries[0] <= xCoord <= boundaries[1]): return column
         return -1
 
     
     def onClick(self, x: int, y: int, button: mouse.Button, pressed: bool) -> None:
+        """This function is called when the player clicks on the screen.
+            It creates a circle object and appends it to the items list."""
         if (pressed and button == mouse.Button.left):
             xCoord: int = pg.mouse.get_pos()[0]
             column: int = self.getColumn(xCoord)

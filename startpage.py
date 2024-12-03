@@ -30,6 +30,7 @@ class StartPage(Page):
 
     @override
     def draw(self) -> None:
+        """Draws all the buttons to the screen."""
         self.screen.fill(data.BACKGROUND_COLOUR)
         for button in self.buttons:
             button.draw(self.screen)
@@ -37,6 +38,7 @@ class StartPage(Page):
 
     @override
     def logic(self) -> None:
+        """Changes the pagename to the self.pagename and updates the buttons."""
         pg.display.set_caption(f"Connect 4 | {self.pageName}")
         for button in self.buttons:
             button.update()

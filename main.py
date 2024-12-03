@@ -1,14 +1,13 @@
 from startpage import StartPage
-from colourspage import ColoursPage
 import data, pygame as pg, sys
 
-pg.init()
 
+pg.init() # Start the pygame module.
+
+# Run the start page. And thus the game.
 startPage: StartPage = StartPage(data.WINDOWS_WIDTH, data.WINDOWS_HEIGHT, 1, "Homepage", data.FPS)
 startPage.run()
 
-# coloursPage: ColoursPage = ColoursPage(data.WINDOWS_WIDTH, data.WINDOWS_HEIGHT, 1, "Colours", data.FPS)
-# coloursPage.run()
-
+# Quit the pygame module. We can quit it since we reached this code and thus the main loop has been broken.
 pg.quit()
 sys.exit()

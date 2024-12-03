@@ -19,6 +19,7 @@ class ChangeColourButton(Button):
 
 
     def logic(self) -> None:
+        """Changes the colour of the player to the colour of the button."""
         if (self.playerID == 1): data.player1_colour = self.colour
         elif (self.playerID == 2): data.player2_colour = self.colour
         else: return;
@@ -29,6 +30,8 @@ class ChangeColourButton(Button):
 
 
     def drawLocked(self, screen: pg.display) -> None:
+        """Locks the button when the other player has chosen the colour.
+            When locked it draws a gray circle to the position."""
         if (self.picked):
             self.outline: Rectangle = Rectangle(self.width + (data.BUTTON_OUTLINE_WIDTH * 4), self.height + (data.BUTTON_OUTLINE_WIDTH * 4),
                                             self.x - (data.BUTTON_OUTLINE_WIDTH * 2), self.y - (data.BUTTON_OUTLINE_WIDTH * 2), data.USER_CHOSEN_OUTLINE_COLOUR, self.borderRadius + (data.BUTTON_OUTLINE_WIDTH * 2))

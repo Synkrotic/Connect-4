@@ -20,7 +20,9 @@ class EndScreen:
         self.background: pg.Surface = pg.Surface((self.width, self.height), pg.SRCALPHA)
         self.background.fill(data.GAME_ENDED_COLOUR)
     
+
     def logic(self) -> bool:
+        """Update the back button, if its pressed return True to exit the page."""
         self.backButton.update()
         if (self.backButton.pressed):
             return True
@@ -28,6 +30,7 @@ class EndScreen:
 
 
     def draw(self, screen: pg.display) -> None:
+        """Draw the background, winner text and back button."""
         screen.blit(self.background, (0, 0))
         screen.blit(self.winner, (self.width//2 - self.winner.get_width()//2, self.height//2 - self.winner.get_height()//2))
         self.backButton.draw(screen)

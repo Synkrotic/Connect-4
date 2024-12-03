@@ -43,9 +43,16 @@ class Game:
         self.listenerThread: threading.Thread = threading.Thread(target=self.startMouseListener)
         self.listenerThread.start()
        
+        # circle: Circle = Circle(None, 0, data.player1_colour, self.scale, self, self.board)
+        # circle: Circle = Circle(None, 0, data.player2_colour, self.scale, self, self.board)
+        # circle: Circle = Circle(None, 1, data.player2_colour, self.scale, self, self.board)
+        # circle: Circle = Circle(None, 1, data.player2_colour, self.scale, self, self.board)
+        # circle: Circle = Circle(None, 1, data.player2_colour, self.scale, self, self.board)
+
         # self.board.showInTerminal()
 
     def getCircles(self) -> list[Circle]:
+        """Return a list of Circle objects that make the holes in the frame."""
         circles: list[Circle] = []
         for x in range(self.COLUMNS):
             for y in range(self.ROWS):
@@ -54,21 +61,28 @@ class Game:
 
 
     def getColorTurnString(self) -> str:
+        """Return the string of the player whose turn it was.
+            This will be used when someone has won the game."""
         if (self.turn): return "Player 2"
         return "Player 1"
     
 
     def getColorTurn(self) -> Player:
+        """Return the player object of which players turn it is."""
         if (self.turn): return self.player1
         return self.player2
 
 
     def startMouseListener(self) -> None:
+        """Start listening for mouse inputs.
+            And updating the player when pressed."""
         self.listener = mouse.Listener(on_click=self.updateActivePlayer)
         self.listener.start()
 
 
     def updateActivePlayer(self, x: int, y: int, button: mouse.Button, pressed: bool) -> None:
+        """Update the active player when the mouse is pressed.
+            If you play against an AI the AI will think and play their move."""
         if (pg.mouse.get_focused() == False): return;
         if (self.ended):
             self.endScreen.backButton.onClickLogic(x, y, button, pressed)
@@ -79,6 +93,8 @@ class Game:
 
 
     def update(self) -> None:
+        """Updates the logic and executes the draw function.
+            At the end it checks if someone has won or if the game is a tie."""
         self.draw()
 
         if (self.ended): 
@@ -87,18 +103,21 @@ class Game:
             return;
 
         tie: bool = False
-        # 
         if (self.board.checkWin() or (tie := self.board.checkTie())):
             winner = self.getColorTurnString()
             print(f"{winner} wins!" if not tie else "It's a tie!")
             self.endScreen = EndScreen(self.width, self.height, 0, 0, f"{winner} won!" if not tie else "It's a tie!")
             self.ended = True
+            return;
         
         if (self.ai and not self.turn):
             self.player2.logic()
 
         
     def draw(self) -> None:
+        """First it draws the background circles, then it draws the background rectangle (the rectangle that create the feet of the frame).
+            Then it circles that are in the board.
+            If the game is ended it will draw the endscreen over the rest."""
         for circle in self.circles:
             circle.draw(self.screen)
         self.background.draw(self.screen)
@@ -109,6 +128,7 @@ class Game:
 
 
     def run(self) -> bool:
+        """The main loop of the game, it executes the update function checks if the window is closed and keeps track of which frame we are on."""
         while self.running:
             if (self.frame == self.fps - 1): self.pressedMouseDown = False
             if (self.frame == self.fps): self.frame = 0

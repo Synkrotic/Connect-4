@@ -11,6 +11,8 @@ class DoneButton(Button):
 
 
     def onClickLogic(self, x: int, y: int, button: mouse.Button, pressed: bool) -> None:
+        """This function is called when the mouse is clicked.
+            And checks if the mouse collides with the button."""
         if (self.rect.collidepoint(pg.mouse.get_pos()) and pressed):
             # self.hovered = False
             self.pressed = not self.pressed
@@ -18,11 +20,15 @@ class DoneButton(Button):
     
     @override
     def logic(self) -> None:
+        """Default logic function for the button.
+            This is empty because I draw the button separately and the logic is in onClickLogic()."""
         pass
     
 
     @override
     def isHovered(self):
+        """This function is called in the update function in the Button class.
+            It checks if the button has been pressed before and keeps the hovercolour when it has been pressed."""
         if (self.pressed): return
         self.hovered = self.rect.collidepoint(pg.mouse.get_pos())
         match self.hovered:

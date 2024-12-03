@@ -24,6 +24,7 @@ class ColourOptionContainer:
 
 
     def getOtherColourID(self, otherContainer: 'ColourOptionContainer') -> int:
+        """Returns the colour ID of the other container's picked colour."""
         self.otherContainer = otherContainer
         for button in self.otherContainer.buttons:
             if (data.USERCOLOURID.get(button.colour) == self.pickedColourID):
@@ -32,6 +33,7 @@ class ColourOptionContainer:
 
 
     def update(self) -> None:
+        """Updates the colour buttons."""
         for button in self.buttons:
             if (data.USERCOLOURID.get(button.colour) != self.otherContainer.pickedColourID):
                 button.otherChoice = False
@@ -40,6 +42,7 @@ class ColourOptionContainer:
 
 
     def draw(self, screen: pg.Surface) -> None:
+        """Draws the colour buttons to the screen."""
         for button in self.buttons:
             button.draw(screen)
             button.drawLocked(screen)

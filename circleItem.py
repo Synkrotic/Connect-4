@@ -26,17 +26,19 @@ class CircleItem:
 
 
     def draw(self, screen: pg.display) -> None:
+        """Draws the circle image on the screen."""
         screen.blit(self.image, self.rect.topleft)
 
 
     def setPosition(self, x: int, y: int) -> None:
+        """Calculate the lowest y position and set the position of the circle."""
         yCoords: int = y
         if (y == None): yCoords = self.getLowestY(x)
 
         self.y = yCoords
 
         if (yCoords == -1):
-            print("Try again. This column is full.")
+            # print("Try again. This column is full.")
             return;
 
         self.board.setItemAt(x, yCoords, self)
@@ -47,14 +49,17 @@ class CircleItem:
         # self.board.showInTerminal()
 
     def calcX(self, x: int) -> int:
+        """Calculate the x position in pixels based on the x position in the board."""
         return (data.CIRCLE_PADDING * self.scale * x) + (x * data.CIRCLE_DIAMETER * self.scale) + (data.FRAME_MARGIN * self.scale)
     
 
     def calcY(self, y: int, windowHeight: int) -> int:
+        """Calculate the y position in pixels based on the y position in the board."""
         return windowHeight - ((data.CIRCLE_DIAMETER * self.scale) + (y * data.CIRCLE_DIAMETER * self.scale) + (data.CIRCLE_PADDING * self.scale * y) + ((data.FRAME_FEET_HEIGHT + data.FRAME_MARGIN)) * self.scale)
     
 
     def getLowestY(self, x: int) -> int:
+        """Get the lowest y position in the column."""
         for y in range(self.board.columns):
             if self.board.getItemAt(x, y).colour == data.BACKGROUND_COLOUR:
                 # print(f"Found! {y} for {self.id}")

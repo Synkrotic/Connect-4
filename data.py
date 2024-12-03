@@ -1,3 +1,5 @@
+# ALL CUSTOMIZABLE DATA
+
 BLACK: tuple[int, int, int] = (0, 0, 0)
 WHITE: tuple[int, int, int] = (255, 255, 255)
 
@@ -15,7 +17,6 @@ USERCOLOURS: dict[int, tuple[int, int, int]] = {
 USERCOLOURID = {v: k for k, v in USERCOLOURS.items()}
 ALREADY_PICKED_COLOUR: tuple[int, int, int] = (50, 50, 50)
 USER_CHOSEN_OUTLINE_COLOUR: tuple[int, int, int] = (0, 120, 120)
-# USER_CHOSEN_OUTLINE_COLOUR: tuple[int, int, int] = (0, 120, 190)
 
 WINDOWS_WIDTH: int = 810
 WINDOWS_HEIGHT: int = 740
@@ -23,7 +24,7 @@ WINDOWS_HEIGHT: int = 740
 player1_colour: tuple[int, int, int] = (190, 0, 0)
 player2_colour: tuple[int, int, int] = (190, 190, 0)
 BACKGROUND_COLOUR: tuple[int, int, int] = (200, 200, 200)
-FRAME_COLOUR: tuple[int, int, int] = (50, 50, 200)
+FRAME_COLOUR: tuple[int, int, int] = (50, 50, 200) # (50, 50, 200)
 TRANSPARENT_COLOUR: tuple[int, int, int] = (0, 0, 0, 0)
 GAME_ENDED_COLOUR: tuple[int, int, int] = (0, 0, 0, 150)
 

@@ -18,19 +18,25 @@ class Page:
 
 
     def update(self) -> None:
+        """Run the logic and draw functions."""
         self.logic()
         self.draw()
 
 
     def logic() -> None:
+        """This is the default logic function. It is empty since every page has other logic.
+            This is why we use the @override decorator in the other page classes."""
         pass
 
 
     def draw(self) -> None:
+        """This is the default draw function. It is empty since every page draws other objects.
+            This is why we use the @override decorator in the other page classes."""
         pass
 
 
     def run(self) -> None:
+        """Run the main loop of the page so its shown on the screen."""
         while self.running:
             for event in pg.event.get():
                 if (event.type == pg.QUIT):

@@ -11,5 +11,6 @@ class ChangeColourPageButton(Button):
 
     @override
     def logic(self) -> None:
+        """When pressed it opens the colours page."""
         page: 'Page' = ColoursPage(self.mainPage.width, self.mainPage.height, self.mainPage.scale, "Colours", self.mainPage.fps) # type: ignore
         page.run()
