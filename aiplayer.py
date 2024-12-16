@@ -1,8 +1,7 @@
-import pygame as pg
+import pygame as pg, random, os
 from typing_extensions import override # type: ignore
 from player import Player
 from circleItem import CircleItem as Circle
-import random
 
 class AIPlayer:
     def __init__(self, colour: tuple[int, int, int], scale: int, game: 'Game', turn: bool) -> None: # type: ignore
@@ -21,13 +20,17 @@ class AIPlayer:
         # Clear AI-Scores.txt
         with open('AI-Scores.txt', 'w') as file:
             file.write("")
+
+        # Delete all files in /kaas/
+        for file in os.listdir('kaas/'):
+            os.remove(f"kaas/{file}")
     
 
     def logic(self) -> None:
         """Make the AI think and make a move."""
         self.calculations = 0
         moveScores: list[dict[int, int]] = self.calculateTurn(1, self.board.copy())
-        self.logScores(moveScores)
+        # self.logScores(moveScores)
 
         self.game.turn = not self.game.turn
 
@@ -77,17 +80,17 @@ class AIPlayer:
         """Calculate the scores for all the possible moves the AI can make.
             The depth is how many turns ahead the AI should calculate."""
         # board.showInTerminal()
-        nextTurnScores: dict[int, int] = {x: self.calculateMove(x, board.copy(), self.colour if depth % 2 == 0 else self.otherColour) for x in range(self.game.COLUMNS)}
-        print()
+        nextTurnScores: dict[int, int] = {x: self.calculateMove(x, board.copy(), (self.otherColour if depth % 2 == 0 or depth == 0 else self.colour)) for x in range(board.columns)}
         nextTurnScores = self.filterMoveScores(nextTurnScores)
         if (depth == 0):
             return [nextTurnScores]
     
         turns: list[dict[int, int]] = []
-        for x in nextTurnScores.items():
-            tempBoard: 'Board' = board.copy() # type: ignore
-            circle: Circle = Circle(None, x[0], (self.colour if depth % 2 == 0 else self.otherColour), self.scale, self.game, tempBoard)
-            turns: list[dict[int, int]] = self.calculateTurn(depth - 1, tempBoard)
+        for x, _ in nextTurnScores.items():
+            boardy: 'Board' = board.copy() # type: ignore
+
+            circle: Circle = Circle(None, x, (self.otherColour if depth % 2 == 0 or depth == 0 else self.colour), self.scale, self.game, boardy)
+            turns.append(self.calculateTurn(depth - 1, boardy))
         return turns + [nextTurnScores]
 
 
@@ -95,9 +98,21 @@ class AIPlayer:
         """Calculate the impact of a move on the board.
             The impact is calculated by comparing the score of the board before and after the move."""
         self.calculations += 1
-        boardScore: int = board.calculatePosition()
-        circle: Circle = Circle(None, x, colour, self.scale, self.game, board)
-        newScore: int = board.calculatePosition()
+        tempBoard: 'Board' = board.copy() # type: ignore
+        boardScore: int = tempBoard.calculatePosition()
+        circle: Circle = Circle(None, x, colour, self.scale, self.game, tempBoard)
+        newScore: int = tempBoard.calculatePosition()
         impactScore: int = newScore - boardScore
+
+        tempBoard.drawToScreen(self.game.screen)
+        pg.image.save(self.game.screen, f"kaas/screenshot_{self.calculations}.png")
+
+        calc: str = f"{self.calculations}: Before: {boardScore} | x: {x} | After: {newScore} | Impact: {impactScore}"
+        with open ('AI-Scores.txt', 'r') as file:
+            calc = file.read() + "\n" + calc
+        with open ('AI-Scores.txt', 'w') as file:
+            file.write(calc + ("\n" if self.calculations % 7 == 0 else ""))
+
+
         # print(impactScore)
         return impactScore

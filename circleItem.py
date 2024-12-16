@@ -10,6 +10,7 @@ class CircleItem:
         self.game: 'Game' = game # type: ignore
         self.board: 'Board' = board # type: ignore
         self.y: int = 0
+        self.x: int = x
 
         self.squareImage: pg.Surface = pg.Surface((self.width, self.height), pg.SRCALPHA)
         self.squareImage.fill(self.colour)
@@ -62,7 +63,5 @@ class CircleItem:
         """Get the lowest y position in the column."""
         for y in range(self.board.columns):
             if self.board.getItemAt(x, y).colour == data.BACKGROUND_COLOUR:
-                # print(f"Found! {y} for {self.id}")
                 return y
-        # print(f"None found! For {self.id}")
         return -1

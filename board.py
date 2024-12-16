@@ -24,7 +24,12 @@ class Board:
         return (self.rows - y - 1, x)
 
 
-    def getItemAt(self, x: int, y: int) -> Player | None:
+    def clear(self):
+        """Clear the board by setting all the items to None."""
+        self.layout = [[None for _ in range(self.columns)] for _ in range(self.rows)]
+
+
+    def getItemAt(self, x: int, y: int) -> Circle | None:
         """Retrieve the item at the given coordinates."""
         if (x < 0 or x > self.rows or
             y  < 0 or y > self.columns): return None
@@ -56,15 +61,15 @@ class Board:
     def copy(self) -> 'Board':
         """Returns a copy of the board."""
         newBoard: Board = Board(self.rows, self.columns)
-        for x in range(self.columns):
-            for y in range(self.rows):
-                newBoard.setItemAt(x, y, self.getItemAt(x, y))
+        for x in range(len(newBoard.layout)):
+            for y in range(len(newBoard.layout[x])):
+                newBoard.layout[x][y] = Circle(self.getItemAt(x, y).y, self.getItemAt(x, y).x, self.getItemAt(x, y).colour, self.getItemAt(x, y).scale, self.getItemAt(x, y).game, newBoard)
         return newBoard
 
 
     def showInTerminal(self) -> None:
-        """Prints the board to the terminal
-            by iterating through the items and checking if the colour is player1_colour or player2_colour.
+        """Prints the board to the terminal by iterating through the items
+            and checking if the colour is player1_colour or player2_colour.
             Used for debugging purposes."""
         for row in self.layout:
             for item in row:
@@ -77,7 +82,8 @@ class Board:
 
     def checkTie(self) -> bool:
         """Check if the game is a tie.
-            By iterating through all the items in the board and checking if there are any empty spots."""
+            By iterating through all the items in the board
+            and checking if there are any empty spots."""
         for x in range(self.columns):
             for y in range(self.rows):
                 if (self.getItemAt(x, y).colour == data.BACKGROUND_COLOUR): return False
@@ -105,7 +111,9 @@ class Board:
 
             if (circle == None or circle.colour == data.BACKGROUND_COLOUR): continue
             elif (circle.colour == colour): result += 1
-            else: break
+            elif (circle.colour != colour): 
+                result = 0
+                break
         return result
 
 
@@ -119,7 +127,9 @@ class Board:
 
             if (circle == None or circle.colour == data.BACKGROUND_COLOUR): continue
             elif (circle.colour == colour): result += 1
-            else: break
+            elif (circle.colour != colour): 
+                result = 0
+                break
         return result
     
 
@@ -132,7 +142,9 @@ class Board:
 
             if (circle == None or circle.colour == data.BACKGROUND_COLOUR): continue
             elif (circle.colour == colour): result += 1
-            else: break
+            elif (circle.colour != colour): 
+                result = 0
+                break
         return result
     
 
@@ -145,7 +157,9 @@ class Board:
 
             if (circle == None or circle.colour == data.BACKGROUND_COLOUR): continue
             elif (circle.colour == colour): result += 1
-            else: break
+            elif (circle.colour != colour): 
+                result = 0
+                break
         return result
     
 
